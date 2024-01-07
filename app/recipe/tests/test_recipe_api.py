@@ -20,6 +20,7 @@ from recipe.serializers import (
 
 RECIPE_URL = reverse('recipe:recipe-list')
 
+
 def detail_url(recipe_id):
     """Create and return a recipe detail URL."""
     return reverse('recipe:recipe-detail', args=[recipe_id])
@@ -39,9 +40,11 @@ def create_recipe(user, **params):
     recipe = Recipe.objects.create(user=user, **defaults)
     return recipe
 
+
 def create_user(**params):
     """Create and return a new user"""
     return get_user_model().objects.create_user(**params)
+
 
 class PublicRecipeAPITests(TestCase):
     """Test unauthenticated API requests."""
@@ -78,7 +81,10 @@ class PrivateRecipeAPITests(TestCase):
 
     def test_recipe_list_limited_to_user(self):
         """Test list of recipe is limited to authenticated user."""
-        other_user = create_user(email='other@exmaple.com', password='password123')
+        other_user = create_user(
+            email='other@exmaple.com',
+            password='password123'
+        )
         create_recipe(user=other_user)
         create_recipe(user=self.user)
 
@@ -179,7 +185,7 @@ class PrivateRecipeAPITests(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(Recipe.objects.filter(id=recipe.id).exists())
-    
+
     def test_delete_other_user_recipe_error(self):
         """Test trying to delete another users recipe gives error."""
         new_user = create_user(email='user2example.com', password='test123')

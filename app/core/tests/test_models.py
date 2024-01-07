@@ -48,7 +48,7 @@ class ModelTest(TestCase):
             'test@example.com',
             'test123'
         )
-        
+
         self.assertTrue(user.is_superuser)
         self.assertTrue(user.is_staff)
 
