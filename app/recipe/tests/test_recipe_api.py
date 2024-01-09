@@ -9,7 +9,7 @@ from PIL import Image
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-from django .urls import reverse
+from django.urls import reverse
 
 from rest_framework import status
 from rest_framework.test import APIClient
@@ -35,7 +35,7 @@ def detail_url(recipe_id):
 
 
 def image_upload_url(recipe_id):
-    """Create and return a recipe upload URL."""
+    """Create and return an image upload URL."""
     return reverse('recipe:recipe-upload-image', args=[recipe_id])
 
 
@@ -407,15 +407,15 @@ class ImageUploadTests(TestCase):
             img.save(image_file, format='JPEG')
             image_file.seek(0)
             payload = {'image': image_file}
-            res = self.client.post(url, payload, format="multipart")
+            res = self.client.post(url, payload, format='multipart')
 
         self.recipe.refresh_from_db()
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertIn('image', res.data)
         self.assertTrue(os.path.exists(self.recipe.image.path))
 
-    def test_upload_bad_request(self):
-        """Test uploading invalid image."""
+    def test_upload_image_bad_request(self):
+        """Test uploading an invalid image."""
         url = image_upload_url(self.recipe.id)
         payload = {'image': 'notanimage'}
         res = self.client.post(url, payload, format='multipart')
